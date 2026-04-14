@@ -585,7 +585,7 @@
 
       <div class="btn-row">
         <button class="light" onclick="resetForm()">New</button>
-        <button onclick="window.print()">Export PDF</button>
+        <button onclick="printDo()">Export PDF</button>
       </div>
 
       <div class="section-title">Saved Records</div>
@@ -631,8 +631,13 @@
     function generateDoNumber() {
       const records = getRecords();
       const fy = getFinancialYearCode($("date").value);
-      const count = records.filter(r => (r.doNumber || "").includes(`/${fy}/`)).length + 1;
-      $("doNumber").value = `MRC/${fy}/${String(count).padStart(3, "0")}`;
+      const maxSerial = records
+        .filter(r => (r.doNumber || "").includes(`/${fy}/`))
+        .map(r => parseInt((r.doNumber || "").split("/").pop(), 10) || 0)
+        .reduce((max, n) => Math.max(max, n), 0);
+
+      const nextSerial = maxSerial + 1;
+      $("doNumber").value = `MRC/${fy}/${String(nextSerial).padStart(3, "0")}`;
     }
 
     function collectFormData() {
@@ -732,7 +737,10 @@
     }
 
     function saveRecord() {
-      if (!$("doNumber").value) generateDoNumber();
+      if (!currentEditId) {
+        generateDoNumber();
+      }
+
       const data = collectFormData();
       const records = getRecords();
       const index = records.findIndex(r => r.id === data.id);
@@ -748,6 +756,14 @@
       currentEditId = data.id;
       generatePreview();
       alert("Record saved");
+    }
+
+    function printDo() {
+      if (!currentEditId) {
+        generateDoNumber();
+        generatePreview();
+      }
+      window.print();
     }
 
     function editRecord(id) {
@@ -768,10 +784,11 @@
       const records = getRecords();
       const record = records.find(r => r.id === id);
       if (!record) return;
-      const copy = { ...record, id: Date.now().toString() };
+      const copy = { ...record, id: Date.now().toString(), doNumber: "" };
       fillForm(copy);
-      currentEditId = copy.id;
+      currentEditId = null;
       generateDoNumber();
+      generatePreview();
     }
 
     function renderRecords() {
