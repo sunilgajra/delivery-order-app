@@ -143,6 +143,12 @@
         <label for="receiverAddress">Receiver Address</label>
         <textarea id="receiverAddress"></textarea>
 
+        <label for="savedReceiverSelect">Saved Receiver Addresses</label>
+        <select id="savedReceiverSelect">
+          <option value="">Select saved receiver</option>
+        </select>
+        <button type="button" class="light" onclick="saveReceiverAddress()">Save This Receiver</button>
+
         <div class="section-title">Cargo Details</div>
         <label for="importerName">Name of Importer</label>
         <input id="importerName" type="text" />
@@ -222,6 +228,14 @@
       return document.getElementById(id);
     }
 
+    function escapeHtml(str) {
+      return str
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;");
+    }
+
     async function loginUser() {
       const email = $("loginEmail").value;
       const password = $("loginPassword").value;
@@ -261,6 +275,7 @@
 
       if (loggedIn) {
         await renderRecords();
+        await renderSavedReceivers();
       }
     }
 
@@ -282,6 +297,47 @@
         return [];
       }
       return data || [];
+    }
+
+    async function getSavedReceivers() {
+      const { data, error } = await supabaseClient
+        .from("delivery_orders")
+        .select("receiver_address")
+        .not("receiver_address", "is", null);
+
+      if (error) {
+        console.error(error);
+        return [];
+      }
+
+      const uniqueReceivers = [...new Set(
+        (data || [])
+          .map(item => (item.receiver_address || "").trim())
+          .filter(Boolean)
+      )];
+
+      return uniqueReceivers;
+    }
+
+    async function renderSavedReceivers() {
+      const receivers = await getSavedReceivers();
+      const select = $("savedReceiverSelect");
+
+      select.innerHTML = `<option value="">Select saved receiver</option>` +
+        receivers.map(addr => {
+          const shortLabel = addr.split("\n")[0].slice(0, 60);
+          return `<option value="${escapeHtml(addr)}">${escapeHtml(shortLabel)}</option>`;
+        }).join("");
+    }
+
+    function saveReceiverAddress() {
+      const receiver = $("receiverAddress").value.trim();
+      if (!receiver) {
+        alert("Enter receiver address first");
+        return;
+      }
+      renderSavedReceivers();
+      alert("Receiver address will now be available in saved list");
     }
 
     async function uploadFile(file, folder) {
@@ -504,6 +560,7 @@
 
       currentEditId = result.data.id;
       await renderRecords();
+      await renderSavedReceivers();
       generatePreview();
       alert("Record saved");
     }
@@ -548,6 +605,7 @@
       await supabaseClient.from("delivery_orders").delete().eq("id", id);
       if (currentEditId === id) await resetForm();
       await renderRecords();
+      await renderSavedReceivers();
     }
 
     async function duplicateRecord(id) {
@@ -609,6 +667,7 @@
       $("stampFile").value = "";
       $("signatureFile").value = "";
       $("lrCopyFile").value = "";
+      $("savedReceiverSelect").value = "";
       $("preview").dataset.stampImage = "";
       $("preview").dataset.signatureImage = "";
       $("preview").dataset.lrCopyImage = "";
@@ -617,6 +676,13 @@
       await generateDoNumber();
       generatePreview();
     }
+
+    $("savedReceiverSelect").addEventListener("change", function () {
+      if (this.value) {
+        $("receiverAddress").value = this.value;
+        generatePreview();
+      }
+    });
 
     $("stampFile").addEventListener("change", async function() {
       const file = this.files[0];
@@ -694,6 +760,7 @@
     async function startApp() {
       await init();
       await checkAuth();
+      await renderSavedReceivers();
     }
 
     startApp();
