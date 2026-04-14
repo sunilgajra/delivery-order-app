@@ -132,31 +132,31 @@
 
     .page {
       width: 794px;
-      min-height: 1123px;
+      min-height: auto;
       background: #fff;
-      padding: 36px 42px 50px;
+      padding: 28px 32px 36px;
       box-shadow: 0 2px 12px rgba(0,0,0,0.12);
     }
 
     .company-header {
       text-align: center;
-      margin-bottom: 18px;
+      margin-bottom: 12px;
     }
 
     .company-name {
-      font-size: 34px;
+      font-size: 32px;
       font-weight: 700;
       color: #7d2222;
       letter-spacing: 2px;
       text-transform: uppercase;
       margin: 0;
-      line-height: 1.1;
+      line-height: 1.05;
       font-family: "Times New Roman", serif;
     }
 
     .company-address {
-      margin-top: 8px;
-      font-size: 13px;
+      margin-top: 6px;
+      font-size: 12px;
       font-weight: 700;
       text-transform: uppercase;
       font-family: "Times New Roman", serif;
@@ -165,56 +165,56 @@
 
     .top-line {
       border-top: 2px solid #a03030;
-      margin-top: 12px;
-      margin-bottom: 34px;
+      margin-top: 10px;
+      margin-bottom: 20px;
     }
 
     .doc-title {
       text-align: center;
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 700;
       text-decoration: underline;
-      margin-bottom: 24px;
+      margin-bottom: 18px;
       text-transform: uppercase;
       font-family: "Times New Roman", serif;
     }
 
     .doc-body {
       font-family: "Times New Roman", serif;
-      font-size: 16px;
+      font-size: 15px;
     }
 
     .meta {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
-      margin-bottom: 18px;
+      margin-bottom: 12px;
     }
 
     .meta div {
-      margin-bottom: 3px;
+      margin-bottom: 2px;
     }
 
     .to-block {
-      line-height: 1.45;
-      margin-bottom: 24px;
+      line-height: 1.35;
+      margin-bottom: 16px;
       white-space: pre-line;
     }
 
     .body-text {
-      margin-bottom: 16px;
-      line-height: 1.5;
+      margin-bottom: 10px;
+      line-height: 1.4;
     }
 
     table.details {
       width: 100%;
       border-collapse: collapse;
-      margin: 12px 0 28px;
-      font-size: 16px;
+      margin: 10px 0 18px;
+      font-size: 15px;
     }
 
     table.details td {
       border: 1px solid #333;
-      padding: 9px 10px;
+      padding: 7px 8px;
       vertical-align: middle;
     }
 
@@ -235,35 +235,35 @@
     }
 
     .note {
-      font-size: 15px;
-      margin: 10px 0 20px;
-      line-height: 1.5;
+      font-size: 14px;
+      margin: 8px 0 12px;
+      line-height: 1.4;
       white-space: pre-line;
     }
 
     .footer-line {
-      font-size: 16px;
-      margin: 16px 0 50px;
+      font-size: 15px;
+      margin: 10px 0 24px;
       text-transform: uppercase;
     }
 
     .signature {
-      margin-top: 50px;
-      line-height: 1.8;
+      margin-top: 28px;
+      line-height: 1.4;
     }
 
     .signature .stamp-img {
-      width: 90px;
+      width: 70px;
       height: auto;
       display: block;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
     }
 
     .signature .sign-img {
-      width: 140px;
+      width: 110px;
       height: auto;
       display: block;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
     }
 
     .signature .role {
@@ -292,20 +292,20 @@
       .page {
         width: 100%;
         min-height: auto;
-        padding: 20px 16px 30px;
+        padding: 18px 14px 24px;
       }
 
       .company-name {
-        font-size: 24px;
+        font-size: 22px;
         letter-spacing: 1px;
       }
 
       .company-address {
-        font-size: 11px;
+        font-size: 10px;
       }
 
       .doc-title {
-        font-size: 18px;
+        font-size: 16px;
       }
 
       .doc-body,
@@ -313,11 +313,11 @@
       table.details,
       .note,
       .footer-line {
-        font-size: 14px;
+        font-size: 13px;
       }
 
       table.details td {
-        padding: 7px 6px;
+        padding: 6px 5px;
       }
 
       .btn-row {
@@ -335,23 +335,105 @@
     }
 
     @media print {
-      body { background: white; }
-      .left-panel { display: none !important; }
+      body {
+        background: white;
+        margin: 0;
+        padding: 0;
+      }
+
+      .left-panel {
+        display: none !important;
+      }
+
       .app {
         display: block;
         padding: 0;
-      }
-      .right-panel { display: block; }
-      .page {
-        width: auto;
-        min-height: auto;
         margin: 0;
-        box-shadow: none;
-        padding: 36px 42px 50px;
       }
+
+      .right-panel {
+        display: block;
+        width: 100%;
+      }
+
+      .page {
+        width: 190mm;
+        min-height: auto;
+        margin: 0 auto;
+        box-shadow: none;
+        padding: 8mm 10mm 10mm;
+        font-size: 12px;
+        transform: scale(0.94);
+        transform-origin: top center;
+      }
+
+      .company-name {
+        font-size: 24px;
+      }
+
+      .company-address {
+        font-size: 10px;
+      }
+
+      .doc-title {
+        font-size: 16px;
+        margin-bottom: 14px;
+      }
+
+      .doc-body,
+      .meta,
+      table.details,
+      .note,
+      .footer-line {
+        font-size: 12px;
+      }
+
+      .meta {
+        margin-bottom: 10px;
+      }
+
+      .to-block {
+        margin-bottom: 12px;
+      }
+
+      .body-text {
+        margin-bottom: 10px;
+      }
+
+      table.details {
+        margin: 8px 0 14px;
+      }
+
+      table.details td {
+        padding: 5px 6px;
+      }
+
+      .note {
+        margin: 6px 0 10px;
+      }
+
+      .footer-line {
+        margin: 10px 0 24px;
+      }
+
+      .signature {
+        margin-top: 20px;
+        line-height: 1.4;
+      }
+
+      .signature .stamp-img {
+        width: 65px;
+        margin-bottom: 6px;
+      }
+
+      .signature .sign-img {
+        width: 100px;
+        margin-bottom: 6px;
+      }
+
       @page {
-        size: A4;
-        margin: 10mm;
+        size: A4 portrait;
+        margin: 5mm;
       }
     }
   </style>
