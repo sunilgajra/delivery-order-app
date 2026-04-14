@@ -19,7 +19,14 @@
     .right-panel { flex: 1; display: flex; justify-content: center; }
     .section-title { margin: 18px 0 8px; font-size: 14px; font-weight: 700; color: #444; text-transform: uppercase; }
     label { display: block; font-size: 13px; font-weight: 700; margin: 8px 0 4px; color: #333; }
-    input, textarea, button, select { width: 100%; padding: 10px 12px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; }
+    input, textarea, button, select {
+      width: 100%;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+    }
     input[type="file"] { padding: 8px; background: #fff; }
     textarea { resize: vertical; min-height: 70px; }
     .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -147,7 +154,15 @@
         <select id="savedReceiverSelect">
           <option value="">Select saved receiver</option>
         </select>
-        <button type="button" class="light" onclick="saveReceiverAddress()">Save This Receiver</button>
+
+        <div class="btn-row">
+          <button type="button" class="light" onclick="saveReceiverAddress()">Save This Receiver</button>
+          <button type="button" class="secondary" onclick="deleteSelectedReceiver()">Delete Selected</button>
+        </div>
+
+        <label for="manageReceiverList">Manage Saved Receivers</label>
+        <select id="manageReceiverList" size="5" style="min-height:120px;"></select>
+        <button type="button" class="light" onclick="fillManagedReceiver()">Use Selected Receiver</button>
 
         <div class="section-title">Cargo Details</div>
         <label for="importerName">Name of Importer</label>
@@ -301,43 +316,106 @@
 
     async function getSavedReceivers() {
       const { data, error } = await supabaseClient
-        .from("delivery_orders")
-        .select("receiver_address")
-        .not("receiver_address", "is", null);
+        .from("saved_receivers")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) {
         console.error(error);
         return [];
       }
 
-      const uniqueReceivers = [...new Set(
-        (data || [])
-          .map(item => (item.receiver_address || "").trim())
-          .filter(Boolean)
-      )];
-
-      return uniqueReceivers;
+      return data || [];
     }
 
     async function renderSavedReceivers() {
       const receivers = await getSavedReceivers();
-      const select = $("savedReceiverSelect");
 
-      select.innerHTML = `<option value="">Select saved receiver</option>` +
-        receivers.map(addr => {
-          const shortLabel = addr.split("\n")[0].slice(0, 60);
-          return `<option value="${escapeHtml(addr)}">${escapeHtml(shortLabel)}</option>`;
+      $("savedReceiverSelect").innerHTML =
+        `<option value="">Select saved receiver</option>` +
+        receivers.map(r => {
+          const shortLabel = (r.title || r.receiver_address.split("\n")[0] || "").slice(0, 60);
+          return `<option value="${r.id}">${escapeHtml(shortLabel)}</option>`;
+        }).join("");
+
+      $("manageReceiverList").innerHTML =
+        receivers.map(r => {
+          const shortLabel = (r.title || r.receiver_address.split("\n")[0] || "").slice(0, 80);
+          return `<option value="${r.id}">${escapeHtml(shortLabel)}</option>`;
         }).join("");
     }
 
-    function saveReceiverAddress() {
+    async function saveReceiverAddress() {
       const receiver = $("receiverAddress").value.trim();
       if (!receiver) {
         alert("Enter receiver address first");
         return;
       }
-      renderSavedReceivers();
-      alert("Receiver address will now be available in saved list");
+
+      const firstLine = receiver.split("\n")[0].trim();
+
+      const { error } = await supabaseClient
+        .from("saved_receivers")
+        .insert({
+          title: firstLine,
+          receiver_address: receiver
+        });
+
+      if (error) {
+        console.error(error);
+        alert("Failed to save receiver");
+        return;
+      }
+
+      await renderSavedReceivers();
+      alert("Receiver saved");
+    }
+
+    async function deleteSelectedReceiver() {
+      const id = $("savedReceiverSelect").value || $("manageReceiverList").value;
+      if (!id) {
+        alert("Select a saved receiver first");
+        return;
+      }
+
+      const { error } = await supabaseClient
+        .from("saved_receivers")
+        .delete()
+        .eq("id", id);
+
+      if (error) {
+        console.error(error);
+        alert("Failed to delete receiver");
+        return;
+      }
+
+      $("savedReceiverSelect").value = "";
+      await renderSavedReceivers();
+      alert("Receiver deleted");
+    }
+
+    async function fillManagedReceiver() {
+      const id = $("manageReceiverList").value;
+      if (!id) {
+        alert("Select a receiver first");
+        return;
+      }
+
+      const { data, error } = await supabaseClient
+        .from("saved_receivers")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (error || !data) {
+        console.error(error);
+        alert("Failed to load receiver");
+        return;
+      }
+
+      $("receiverAddress").value = data.receiver_address || "";
+      $("savedReceiverSelect").value = id;
+      generatePreview();
     }
 
     async function uploadFile(file, folder) {
@@ -560,7 +638,6 @@
 
       currentEditId = result.data.id;
       await renderRecords();
-      await renderSavedReceivers();
       generatePreview();
       alert("Record saved");
     }
@@ -605,7 +682,6 @@
       await supabaseClient.from("delivery_orders").delete().eq("id", id);
       if (currentEditId === id) await resetForm();
       await renderRecords();
-      await renderSavedReceivers();
     }
 
     async function duplicateRecord(id) {
@@ -668,6 +744,7 @@
       $("signatureFile").value = "";
       $("lrCopyFile").value = "";
       $("savedReceiverSelect").value = "";
+      $("manageReceiverList").value = "";
       $("preview").dataset.stampImage = "";
       $("preview").dataset.signatureImage = "";
       $("preview").dataset.lrCopyImage = "";
@@ -677,11 +754,20 @@
       generatePreview();
     }
 
-    $("savedReceiverSelect").addEventListener("change", function () {
-      if (this.value) {
-        $("receiverAddress").value = this.value;
-        generatePreview();
-      }
+    $("savedReceiverSelect").addEventListener("change", async function () {
+      if (!this.value) return;
+
+      const { data, error } = await supabaseClient
+        .from("saved_receivers")
+        .select("*")
+        .eq("id", this.value)
+        .single();
+
+      if (error || !data) return;
+
+      $("receiverAddress").value = data.receiver_address || "";
+      $("manageReceiverList").value = data.id;
+      generatePreview();
     });
 
     $("stampFile").addEventListener("change", async function() {
