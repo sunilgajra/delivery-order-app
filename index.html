@@ -120,12 +120,14 @@
       display: flex;
       gap: 8px;
       margin-top: 8px;
+      flex-wrap: wrap;
     }
 
     .record-actions button {
       margin-bottom: 0;
       padding: 8px 10px;
       font-size: 12px;
+      width: auto;
     }
 
     .page {
@@ -267,6 +269,69 @@
     .signature .role {
       font-weight: 700;
       text-transform: uppercase;
+    }
+
+    @media (max-width: 768px) {
+      .app {
+        flex-direction: column;
+        padding: 10px;
+        gap: 12px;
+      }
+
+      .left-panel,
+      .right-panel {
+        width: 100%;
+      }
+
+      .left-panel {
+        max-height: none;
+        overflow: visible;
+        padding: 14px;
+      }
+
+      .page {
+        width: 100%;
+        min-height: auto;
+        padding: 20px 16px 30px;
+      }
+
+      .company-name {
+        font-size: 24px;
+        letter-spacing: 1px;
+      }
+
+      .company-address {
+        font-size: 11px;
+      }
+
+      .doc-title {
+        font-size: 18px;
+      }
+
+      .doc-body,
+      .meta,
+      table.details,
+      .note,
+      .footer-line {
+        font-size: 14px;
+      }
+
+      table.details td {
+        padding: 7px 6px;
+      }
+
+      .btn-row {
+        grid-template-columns: 1fr;
+      }
+
+      button {
+        padding: 12px;
+        font-size: 15px;
+      }
+
+      input, textarea {
+        font-size: 16px;
+      }
     }
 
     @media print {
