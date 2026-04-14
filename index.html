@@ -271,6 +271,25 @@
       text-transform: uppercase;
     }
 
+    .lr-copy-box {
+      margin-top: 20px;
+    }
+
+    .lr-copy-title {
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .lr-copy-img {
+      width: 100%;
+      max-height: 220px;
+      object-fit: contain;
+      border: 1px solid #999;
+      padding: 4px;
+      display: block;
+    }
+
     @media (max-width: 768px) {
       .app {
         flex-direction: column;
@@ -331,6 +350,10 @@
 
       input, textarea {
         font-size: 16px;
+      }
+
+      .lr-copy-img {
+        max-height: 180px;
       }
     }
 
@@ -431,6 +454,14 @@
         margin-bottom: 6px;
       }
 
+      .lr-copy-box {
+        margin-top: 14px;
+      }
+
+      .lr-copy-img {
+        max-height: 140px;
+      }
+
       @page {
         size: A4 portrait;
         margin: 5mm;
@@ -507,6 +538,10 @@
 
       <label for="signatureFile">Signature Image</label>
       <input id="signatureFile" type="file" accept="image/*" />
+
+      <div class="section-title">LR Copy Upload</div>
+      <label for="lrCopyFile">LR Copy Image</label>
+      <input id="lrCopyFile" type="file" accept="image/*" />
 
       <div class="btn-row">
         <button onclick="generatePreview()">Preview</button>
@@ -585,7 +620,8 @@
         termsCondition: $("termsCondition").value,
         authorisedSignatory: $("authorisedSignatory").value,
         stampImage: $("preview").dataset.stampImage || "",
-        signatureImage: $("preview").dataset.signatureImage || ""
+        signatureImage: $("preview").dataset.signatureImage || "",
+        lrCopyImage: $("preview").dataset.lrCopyImage || ""
       };
     }
 
@@ -595,6 +631,7 @@
       });
       $("preview").dataset.stampImage = data.stampImage || "";
       $("preview").dataset.signatureImage = data.signatureImage || "";
+      $("preview").dataset.lrCopyImage = data.lrCopyImage || "";
       currentEditId = data.id;
       generatePreview();
     }
@@ -646,6 +683,13 @@
             ${d.signatureImage ? `<img src="${d.signatureImage}" class="sign-img" alt="Signature" />` : ""}
             <div class="role">${d.authorisedSignatory || ""}</div>
           </div>
+
+          ${d.lrCopyImage ? `
+            <div class="lr-copy-box">
+              <div class="lr-copy-title">LR Copy</div>
+              <img src="${d.lrCopyImage}" alt="LR Copy" class="lr-copy-img" />
+            </div>
+          ` : ""}
         </div>
       `;
     }
@@ -716,8 +760,10 @@
       document.querySelectorAll("input:not(#doNumber):not([type='file']), textarea").forEach(el => el.value = "");
       $("stampFile").value = "";
       $("signatureFile").value = "";
+      $("lrCopyFile").value = "";
       $("preview").dataset.stampImage = "";
       $("preview").dataset.signatureImage = "";
+      $("preview").dataset.lrCopyImage = "";
       $("date").value = new Date().toISOString().split("T")[0];
       $("validityDate").value = new Date().toISOString().split("T")[0];
       generateDoNumber();
@@ -745,6 +791,14 @@
       const file = this.files[0];
       readImage(file, function(base64) {
         $("preview").dataset.signatureImage = base64;
+        generatePreview();
+      });
+    });
+
+    $("lrCopyFile").addEventListener("change", function() {
+      const file = this.files[0];
+      readImage(file, function(base64) {
+        $("preview").dataset.lrCopyImage = base64;
         generatePreview();
       });
     });
@@ -779,6 +833,7 @@
 
       $("preview").dataset.stampImage = "";
       $("preview").dataset.signatureImage = "";
+      $("preview").dataset.lrCopyImage = "";
 
       generateDoNumber();
       renderRecords();
