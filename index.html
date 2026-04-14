@@ -4,23 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Delivery Order App</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: #f3f3f3;
       color: #111;
     }
-
     .app {
       display: flex;
       gap: 20px;
       padding: 20px;
       align-items: flex-start;
     }
-
     .left-panel {
       width: 380px;
       background: #fff;
@@ -30,17 +28,12 @@
       max-height: calc(100vh - 40px);
       overflow: auto;
     }
-
     .right-panel {
       flex: 1;
       display: flex;
       justify-content: center;
     }
-
-    h2 {
-      margin: 0 0 12px;
-    }
-
+    h2 { margin: 0 0 12px; }
     .section-title {
       margin: 18px 0 8px;
       font-size: 14px;
@@ -48,7 +41,6 @@
       color: #444;
       text-transform: uppercase;
     }
-
     label {
       display: block;
       font-size: 13px;
@@ -56,7 +48,6 @@
       margin: 8px 0 4px;
       color: #333;
     }
-
     input, textarea, button {
       width: 100%;
       padding: 10px 12px;
@@ -65,23 +56,19 @@
       border-radius: 8px;
       font-size: 14px;
     }
-
     input[type="file"] {
       padding: 8px;
       background: #fff;
     }
-
     textarea {
       resize: vertical;
       min-height: 70px;
     }
-
     .btn-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
-
     button {
       cursor: pointer;
       border: none;
@@ -89,20 +76,16 @@
       color: white;
       font-weight: 600;
     }
-
     button.secondary { background: #4b5563; }
-
     button.light {
       background: #e5e7eb;
       color: #111;
     }
-
     .record-list {
       margin-top: 10px;
       border-top: 1px solid #eee;
       padding-top: 10px;
     }
-
     .record-item {
       border: 1px solid #ddd;
       border-radius: 8px;
@@ -110,26 +93,22 @@
       margin-bottom: 10px;
       background: #fafafa;
     }
-
     .record-item strong {
       display: block;
       margin-bottom: 4px;
     }
-
     .record-actions {
       display: flex;
       gap: 8px;
       margin-top: 8px;
       flex-wrap: wrap;
     }
-
     .record-actions button {
       margin-bottom: 0;
       padding: 8px 10px;
       font-size: 12px;
       width: auto;
     }
-
     .page {
       width: 794px;
       min-height: auto;
@@ -137,12 +116,10 @@
       padding: 28px 32px 36px;
       box-shadow: 0 2px 12px rgba(0,0,0,0.12);
     }
-
     .company-header {
       text-align: center;
       margin-bottom: 12px;
     }
-
     .company-name {
       font-size: 32px;
       font-weight: 700;
@@ -153,7 +130,6 @@
       line-height: 1.05;
       font-family: "Times New Roman", serif;
     }
-
     .company-address {
       margin-top: 6px;
       font-size: 12px;
@@ -162,13 +138,11 @@
       font-family: "Times New Roman", serif;
       white-space: pre-line;
     }
-
     .top-line {
       border-top: 2px solid #a03030;
       margin-top: 10px;
       margin-bottom: 20px;
     }
-
     .doc-title {
       text-align: center;
       font-size: 18px;
@@ -178,87 +152,72 @@
       text-transform: uppercase;
       font-family: "Times New Roman", serif;
     }
-
     .doc-body {
       font-family: "Times New Roman", serif;
       font-size: 15px;
     }
-
     .meta {
       font-size: 15px;
       font-weight: 700;
       margin-bottom: 12px;
     }
-
     .meta div {
       margin-bottom: 2px;
     }
-
     .to-block {
       line-height: 1.35;
       margin-bottom: 16px;
       white-space: pre-line;
     }
-
     .body-text {
       margin-bottom: 10px;
       line-height: 1.4;
     }
-
     table.details {
       width: 100%;
       border-collapse: collapse;
       margin: 10px 0 18px;
       font-size: 15px;
     }
-
     table.details td {
       border: 1px solid #333;
       padding: 7px 8px;
       vertical-align: middle;
     }
-
     table.details td:first-child {
       width: 42%;
       text-transform: uppercase;
     }
-
     table.details td:last-child {
       width: 58%;
       text-transform: uppercase;
     }
-
     .note-title {
       font-weight: 700;
       margin-bottom: 6px;
       text-transform: uppercase;
     }
-
     .note {
       font-size: 14px;
       margin: 8px 0 12px;
       line-height: 1.4;
       white-space: pre-line;
     }
-
     .footer-line {
       font-size: 15px;
       margin: 10px 0 24px;
       text-transform: uppercase;
     }
-
     .signature {
       margin-top: 18px;
       line-height: 1.3;
     }
-
     .signature-stack {
       position: relative;
       width: 120px;
       height: 70px;
       margin-bottom: 4px;
     }
-
     .signature .stamp-img {
       position: absolute;
       left: 0;
@@ -267,7 +226,6 @@
       height: auto;
       display: block;
     }
-
     .signature .sign-img {
       position: absolute;
       left: 28px;
@@ -276,24 +234,20 @@
       height: auto;
       display: block;
     }
-
     .signature .role {
       font-weight: 700;
       text-transform: uppercase;
       margin-top: 2px;
     }
-
     .lr-copy-box {
       margin-top: 16px;
       width: 100%;
     }
-
     .lr-copy-title {
       font-weight: 700;
       text-transform: uppercase;
       margin-bottom: 6px;
     }
-
     .lr-copy-img {
       width: 100%;
       height: 300px;
@@ -304,96 +258,73 @@
       display: block;
       background: #fff;
     }
-
     @media (max-width: 768px) {
       .app {
         flex-direction: column;
         padding: 10px;
         gap: 12px;
       }
-
-      .left-panel,
-      .right-panel {
+      .left-panel, .right-panel {
         width: 100%;
       }
-
       .left-panel {
         max-height: none;
         overflow: visible;
         padding: 14px;
       }
-
       .page {
         width: 100%;
         min-height: auto;
         padding: 18px 14px 24px;
       }
-
       .company-name {
         font-size: 22px;
         letter-spacing: 1px;
       }
-
       .company-address {
         font-size: 10px;
       }
-
       .doc-title {
         font-size: 16px;
       }
-
-      .doc-body,
-      .meta,
-      table.details,
-      .note,
-      .footer-line {
+      .doc-body, .meta, table.details, .note, .footer-line {
         font-size: 13px;
       }
-
       table.details td {
         padding: 6px 5px;
       }
-
       .btn-row {
         grid-template-columns: 1fr;
       }
-
       button {
         padding: 12px;
         font-size: 15px;
       }
-
       input, textarea {
         font-size: 16px;
       }
-
       .lr-copy-img {
         height: 220px;
       }
     }
-
     @media print {
       body {
         background: white;
         margin: 0;
         padding: 0;
       }
-
       .left-panel {
         display: none !important;
       }
-
       .app {
         display: block;
         padding: 0;
         margin: 0;
       }
-
       .right-panel {
         display: block;
         width: 100%;
       }
-
       .page {
         width: 190mm;
         min-height: auto;
@@ -404,88 +335,67 @@
         transform: scale(0.94);
         transform-origin: top center;
       }
-
       .company-name {
         font-size: 24px;
       }
-
       .company-address {
         font-size: 10px;
       }
-
       .doc-title {
         font-size: 16px;
         margin-bottom: 14px;
       }
-
-      .doc-body,
-      .meta,
-      table.details,
-      .note,
-      .footer-line {
+      .doc-body, .meta, table.details, .note, .footer-line {
         font-size: 12px;
       }
-
       .meta {
         margin-bottom: 10px;
       }
-
       .to-block {
         margin-bottom: 12px;
       }
-
       .body-text {
         margin-bottom: 10px;
       }
-
       table.details {
         margin: 8px 0 14px;
       }
-
       table.details td {
         padding: 5px 6px;
       }
-
       .note {
         margin: 6px 0 10px;
       }
-
       .footer-line {
         margin: 10px 0 20px;
       }
-
       .signature {
         margin-top: 14px;
         line-height: 1.2;
       }
-
       .signature-stack {
         position: relative;
         width: 105px;
         height: 58px;
         margin-bottom: 2px;
       }
-
       .signature .stamp-img {
         position: absolute;
         left: 0;
         bottom: 0;
         width: 52px;
       }
-
       .signature .sign-img {
         position: absolute;
         left: 24px;
         top: 0;
         width: 72px;
       }
-
       .lr-copy-box {
         margin-top: 10px;
         width: 100%;
         break-inside: avoid;
       }
-
       .lr-copy-img {
         width: 100%;
         height: 210px;
@@ -496,7 +406,6 @@
         display: block;
         background: #fff;
       }
-
       @page {
         size: A4 portrait;
         margin: 5mm;
@@ -534,28 +443,20 @@
       <textarea id="receiverAddress"></textarea>
 
       <div class="section-title">Cargo Details</div>
-
       <label for="importerName">Name of Importer</label>
       <input id="importerName" type="text" />
-
       <label for="traderName">Name of Trader</label>
       <input id="traderName" type="text" />
-
       <label for="tankNo">Tank No</label>
       <input id="tankNo" type="text" />
-
       <label for="productName">Product Name</label>
       <input id="productName" type="text" />
-
       <label for="transportName">Transport Name</label>
       <input id="transportName" type="text" />
-
       <label for="vehicleNo">Vehicle No</label>
       <input id="vehicleNo" type="text" />
-
       <label for="totalVehicles">Total Vehicles</label>
       <input id="totalVehicles" type="text" />
-
       <label for="qtyMts">Qty In (MTS)</label>
       <input id="qtyMts" type="text" />
 
@@ -570,7 +471,6 @@
       <div class="section-title">Stamp / Signature Upload</div>
       <label for="stampFile">Stamp Image</label>
       <input id="stampFile" type="file" accept="image/*" />
-
       <label for="signatureFile">Signature Image</label>
       <input id="signatureFile" type="file" accept="image/*" />
 
@@ -598,6 +498,10 @@
   </div>
 
   <script>
+    const SUPABASE_URL = "https://phofoqlnpzkuesabtciu.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBob2ZvcWxucHprdWVzYWJ0Y2l1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNTYxNDcsImV4cCI6MjA5MTczMjE0N30.nIm-cvUzxbBtA8kZEUdoLRI9CTjGgEQB2x6D4t4cCZA";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     let currentEditId = null;
 
     function $(id) {
@@ -611,6 +515,38 @@
       return `${parts[2]}/${parts[1]}/${parts[0]}`;
     }
 
+    async function getRecords() {
+      const { data, error } = await supabaseClient
+        .from("delivery_orders")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error(error);
+        return [];
+      }
+      return data || [];
+    }
+
+    async function uploadFile(file, folder) {
+      const fileName = `${folder}/${Date.now()}-${file.name}`;
+      const { error } = await supabaseClient.storage
+        .from("delivery-files")
+        .upload(fileName, file);
+
+      if (error) {
+        console.error(error);
+        alert("File upload failed");
+        return "";
+      }
+
+      const { data } = supabaseClient.storage
+        .from("delivery-files")
+        .getPublicUrl(fileName);
+
+      return data.publicUrl;
+    }
+
     function getFinancialYearCode(dateStr) {
       const date = dateStr ? new Date(dateStr) : new Date();
       const year = date.getFullYear();
@@ -620,20 +556,22 @@
       return `${String(startYear).slice(-2)}-${endYear}`;
     }
 
-    function getRecords() {
-      return JSON.parse(localStorage.getItem("delivery_orders") || "[]");
-    }
-
-    function setRecords(records) {
-      localStorage.setItem("delivery_orders", JSON.stringify(records));
-    }
-
-    function generateDoNumber() {
-      const records = getRecords();
+    async function generateDoNumber() {
       const fy = getFinancialYearCode($("date").value);
-      const maxSerial = records
-        .filter(r => (r.doNumber || "").includes(`/${fy}/`))
-        .map(r => parseInt((r.doNumber || "").split("/").pop(), 10) || 0)
+
+      const { data, error } = await supabaseClient
+        .from("delivery_orders")
+        .select("do_number")
+        .like("do_number", `MRC/${fy}/%`);
+
+      if (error) {
+        console.error(error);
+        $("doNumber").value = `MRC/${fy}/001`;
+        return;
+      }
+
+      const maxSerial = (data || [])
+        .map(r => parseInt((r.do_number || "").split("/").pop(), 10) || 0)
         .reduce((max, n) => Math.max(max, n), 0);
 
       const nextSerial = maxSerial + 1;
@@ -642,7 +580,7 @@
 
     function collectFormData() {
       return {
-        id: currentEditId || Date.now().toString(),
+        id: currentEditId,
         letterHead: $("letterHead").value,
         address: $("address").value,
         doNumber: $("doNumber").value,
@@ -666,13 +604,26 @@
     }
 
     function fillForm(data) {
-      Object.keys(data).forEach(key => {
-        if ($(key)) $(key).value = data[key] || "";
-      });
+      $("letterHead").value = data.letterHead || "";
+      $("address").value = data.address || "";
+      $("doNumber").value = data.doNumber || "";
+      $("date").value = data.date || "";
+      $("validityDate").value = data.validityDate || "";
+      $("receiverAddress").value = data.receiverAddress || "";
+      $("importerName").value = data.importerName || "";
+      $("traderName").value = data.traderName || "";
+      $("tankNo").value = data.tankNo || "";
+      $("productName").value = data.productName || "";
+      $("transportName").value = data.transportName || "";
+      $("vehicleNo").value = data.vehicleNo || "";
+      $("totalVehicles").value = data.totalVehicles || "";
+      $("qtyMts").value = data.qtyMts || "";
+      $("termsCondition").value = data.termsCondition || "";
+      $("authorisedSignatory").value = data.authorisedSignatory || "";
       $("preview").dataset.stampImage = data.stampImage || "";
       $("preview").dataset.signatureImage = data.signatureImage || "";
       $("preview").dataset.lrCopyImage = data.lrCopyImage || "";
-      currentEditId = data.id;
+      currentEditId = data.id || null;
       generatePreview();
     }
 
@@ -736,69 +687,157 @@
       `;
     }
 
-    function saveRecord() {
+    async function saveRecord() {
       if (!currentEditId) {
-        generateDoNumber();
+        await generateDoNumber();
       }
 
-      const data = collectFormData();
-      const records = getRecords();
-      const index = records.findIndex(r => r.id === data.id);
+      const d = collectFormData();
 
-      if (index >= 0) {
-        records[index] = data;
+      const payload = {
+        do_number: d.doNumber,
+        letter_head: d.letterHead,
+        address: d.address,
+        date: d.date,
+        validity_date: d.validityDate,
+        receiver_address: d.receiverAddress,
+        importer_name: d.importerName,
+        trader_name: d.traderName,
+        tank_no: d.tankNo,
+        product_name: d.productName,
+        transport_name: d.transportName,
+        vehicle_no: d.vehicleNo,
+        total_vehicles: d.totalVehicles,
+        qty_mts: d.qtyMts,
+        terms_condition: d.termsCondition,
+        authorised_signatory: d.authorisedSignatory,
+        stamp_image: d.stampImage,
+        signature_image: d.signatureImage,
+        lr_copy_image: d.lrCopyImage
+      };
+
+      let result;
+      if (currentEditId) {
+        result = await supabaseClient
+          .from("delivery_orders")
+          .update(payload)
+          .eq("id", currentEditId)
+          .select()
+          .single();
       } else {
-        records.push(data);
+        result = await supabaseClient
+          .from("delivery_orders")
+          .insert(payload)
+          .select()
+          .single();
       }
 
-      setRecords(records);
-      renderRecords();
-      currentEditId = data.id;
+      if (result.error) {
+        console.error(result.error);
+        alert("Save failed");
+        return;
+      }
+
+      currentEditId = result.data.id;
+      await renderRecords();
       generatePreview();
       alert("Record saved");
     }
 
-    function printDo() {
+    async function printDo() {
       if (!currentEditId) {
-        generateDoNumber();
+        await generateDoNumber();
         generatePreview();
       }
       window.print();
     }
 
-    function editRecord(id) {
-      const records = getRecords();
-      const record = records.find(r => r.id === id);
-      if (!record) return;
-      fillForm(record);
+    async function editRecord(id) {
+      const { data, error } = await supabaseClient
+        .from("delivery_orders")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (error || !data) return;
+
+      fillForm({
+        id: data.id,
+        doNumber: data.do_number,
+        letterHead: data.letter_head,
+        address: data.address,
+        date: data.date,
+        validityDate: data.validity_date,
+        receiverAddress: data.receiver_address,
+        importerName: data.importer_name,
+        traderName: data.trader_name,
+        tankNo: data.tank_no,
+        productName: data.product_name,
+        transportName: data.transport_name,
+        vehicleNo: data.vehicle_no,
+        totalVehicles: data.total_vehicles,
+        qtyMts: data.qty_mts,
+        termsCondition: data.terms_condition,
+        authorisedSignatory: data.authorised_signatory,
+        stampImage: data.stamp_image,
+        signatureImage: data.signature_image,
+        lrCopyImage: data.lr_copy_image
+      });
     }
 
-    function deleteRecord(id) {
-      const records = getRecords().filter(r => r.id !== id);
-      setRecords(records);
-      renderRecords();
-      if (currentEditId === id) resetForm();
+    async function deleteRecord(id) {
+      await supabaseClient.from("delivery_orders").delete().eq("id", id);
+      if (currentEditId === id) {
+        await resetForm();
+      }
+      await renderRecords();
     }
 
-    function duplicateRecord(id) {
-      const records = getRecords();
-      const record = records.find(r => r.id === id);
-      if (!record) return;
-      const copy = { ...record, id: Date.now().toString(), doNumber: "" };
-      fillForm(copy);
+    async function duplicateRecord(id) {
+      const { data, error } = await supabaseClient
+        .from("delivery_orders")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (error || !data) return;
+
+      fillForm({
+        id: null,
+        doNumber: "",
+        letterHead: data.letter_head,
+        address: data.address,
+        date: data.date,
+        validityDate: data.validity_date,
+        receiverAddress: data.receiver_address,
+        importerName: data.importer_name,
+        traderName: data.trader_name,
+        tankNo: data.tank_no,
+        productName: data.product_name,
+        transportName: data.transport_name,
+        vehicleNo: data.vehicle_no,
+        totalVehicles: data.total_vehicles,
+        qtyMts: data.qty_mts,
+        termsCondition: data.terms_condition,
+        authorisedSignatory: data.authorised_signatory,
+        stampImage: data.stamp_image,
+        signatureImage: data.signature_image,
+        lrCopyImage: data.lr_copy_image
+      });
+
       currentEditId = null;
-      generateDoNumber();
+      await generateDoNumber();
       generatePreview();
     }
 
-    function renderRecords() {
-      const records = getRecords().slice().reverse();
+    async function renderRecords() {
+      const records = await getRecords();
       $("recordList").innerHTML = records.length
         ? records.map(r => `
           <div class="record-item">
-            <strong>${r.doNumber || "No DO Number"}</strong>
-            <div>${r.letterHead || ""}</div>
-            <div>${formatDateDisplay(r.date)}</div>
+            <strong>${r.do_number || "No DO Number"}</strong>
+            <div>${r.letter_head || ""}</div>
+            <div>${r.date ? formatDateDisplay(r.date) : ""}</div>
             <div class="record-actions">
               <button onclick="editRecord('${r.id}')">Edit</button>
               <button class="secondary" onclick="duplicateRecord('${r.id}')">Duplicate</button>
@@ -809,7 +848,7 @@
         : "<div>No saved records</div>";
     }
 
-    function resetForm() {
+    async function resetForm() {
       currentEditId = null;
       document.querySelectorAll("input:not(#doNumber):not([type='file']), textarea").forEach(el => el.value = "");
       $("stampFile").value = "";
@@ -820,41 +859,38 @@
       $("preview").dataset.lrCopyImage = "";
       $("date").value = new Date().toISOString().split("T")[0];
       $("validityDate").value = new Date().toISOString().split("T")[0];
-      generateDoNumber();
+      await generateDoNumber();
       generatePreview();
     }
 
-    function readImage(file, callback) {
+    $("stampFile").addEventListener("change", async function() {
+      const file = this.files[0];
       if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        callback(e.target.result);
-      };
-      reader.readAsDataURL(file);
-    }
-
-    $("stampFile").addEventListener("change", function() {
-      const file = this.files[0];
-      readImage(file, function(base64) {
-        $("preview").dataset.stampImage = base64;
+      const url = await uploadFile(file, "stamp");
+      if (url) {
+        $("preview").dataset.stampImage = url;
         generatePreview();
-      });
+      }
     });
 
-    $("signatureFile").addEventListener("change", function() {
+    $("signatureFile").addEventListener("change", async function() {
       const file = this.files[0];
-      readImage(file, function(base64) {
-        $("preview").dataset.signatureImage = base64;
+      if (!file) return;
+      const url = await uploadFile(file, "signature");
+      if (url) {
+        $("preview").dataset.signatureImage = url;
         generatePreview();
-      });
+      }
     });
 
-    $("lrCopyFile").addEventListener("change", function() {
+    $("lrCopyFile").addEventListener("change", async function() {
       const file = this.files[0];
-      readImage(file, function(base64) {
-        $("preview").dataset.lrCopyImage = base64;
+      if (!file) return;
+      const url = await uploadFile(file, "lr");
+      if (url) {
+        $("preview").dataset.lrCopyImage = url;
         generatePreview();
-      });
+      }
     });
 
     document.querySelectorAll("input, textarea").forEach(el => {
@@ -863,34 +899,19 @@
       }
     });
 
-    $("date").addEventListener("change", () => {
-      if (!currentEditId) generateDoNumber();
+    $("date").addEventListener("change", async () => {
+      if (!currentEditId) await generateDoNumber();
       generatePreview();
     });
 
-    function init() {
+    async function init() {
       $("date").value = new Date().toISOString().split("T")[0];
       $("validityDate").value = new Date().toISOString().split("T")[0];
-      $("letterHead").value = "MURJI RAVJI AND COMPANY";
-      $("address").value = "SHOP NO 410, PLOT NO D/66 SECTOR 12, PRIME MALL, KHARGHAR, NAVI MUMBAI, MAHARASHTRA - 410210";
-      $("receiverAddress").value = "Arihant Agro Industries\nFormally Known as ACCL (Agencies & Cargo Care Ltd)\nUnit-2, Opp Sea Rock Hotel,\nKandla-370210";
-      $("importerName").value = "MURJI RAVJI AND COMPANY";
-      $("traderName").value = "MURJI RAVJI AND COMPANY";
-      $("tankNo").value = "T-03";
-      $("productName").value = "INDUSTRIAL OIL";
-      $("transportName").value = "DWARKESH ROADLINES";
-      $("vehicleNo").value = "GJ39TA2743";
-      $("totalVehicles").value = "1";
-      $("qtyMts").value = "35 MT";
-      $("termsCondition").value = "Actual Loading may variation(+ /-5%) of the above-mentioned quantity.";
-      $("authorisedSignatory").value = "Authorised Signatory";
-
       $("preview").dataset.stampImage = "";
       $("preview").dataset.signatureImage = "";
       $("preview").dataset.lrCopyImage = "";
-
-      generateDoNumber();
-      renderRecords();
+      await generateDoNumber();
+      await renderRecords();
       generatePreview();
     }
 
