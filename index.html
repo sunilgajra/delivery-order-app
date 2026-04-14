@@ -161,8 +161,17 @@
       font-weight: 700;
       margin-bottom: 12px;
     }
-    .meta div {
-      margin-bottom: 2px;
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+    }
+    .meta-left {
+      text-align: left;
+    }
+    .meta-right {
+      text-align: right;
     }
     .to-block {
       line-height: 1.35;
@@ -582,9 +591,6 @@
       const config = COMPANY_CONFIG[company];
       if (!config) return;
       $("address").value = config.address;
-      if (!currentEditId) {
-        generateDoNumber();
-      }
       generatePreview();
     }
 
@@ -673,7 +679,10 @@
 
         <div class="doc-body">
           <div class="meta">
-            <div>D. O. NO :-${d.doNumber || ""} &nbsp;&nbsp; DATE:-${formatDateDisplay(d.date)}</div>
+            <div class="meta-row">
+              <div class="meta-left">D. O. NO :-${d.doNumber || ""}</div>
+              <div class="meta-right">DATE:-${formatDateDisplay(d.date)}</div>
+            </div>
             <div>Validity Date ${formatDateDisplay(d.validityDate)}</div>
           </div>
 
